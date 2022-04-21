@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+    {% if 'edit' in request.get_full_path %}
+        Edit Post
+    {% else %}
+        New Post
+    {% endif %}
+{% endblock %}
+{% block content %}
+<form method="POST">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

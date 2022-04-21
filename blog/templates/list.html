@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+    Post List
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+    <div>
+        <a href="{% url 'blog:create' %}">New</a>
+    </div>
+    {% endif %}
+{% for post in page_obj %}
+    <div>
+        <h3>{{ post.title }}</h3>
+        <a href="{% url 'blog:detail' post.id %}">View</a>
+        {% if post.author == user %}
+            <a href="{% url 'blog:update' post.id %}">Edit</a>
+        {% endif %}
+        <p>{{ post.author }}</p>
+        <p>{{ post.body|truncatechars:50 }}</p>
+
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+    </div>
+{% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
